@@ -7,10 +7,12 @@ import GoalItem from './components/GoalItem';
 export default function App() {
   const [courceGoles, setCourceGoles] = useState([])
 
-  
+  const [isAddMode, setisAddMode] = useState(false)
+
 
   const addGoleHandler = (goleTitle) =>{
     setCourceGoles([...courceGoles, {id : Math.random().toString(), value : goleTitle}])
+    setisAddMode(false)
   }
 
   const removeGoleHandler = goleID =>{
@@ -18,14 +20,19 @@ export default function App() {
       return currentGole.filter((gole)=> gole.id !== goleID)
     })
   }
+
+  const cancleGoel = () =>{
+    setisAddMode(false)
+  }
   return (
     <View style={styles.screen}>
-      <GoalInput onAddGole={addGoleHandler} />
+      <Button title='Add New Gole' onPress={() => setisAddMode(true)} />
+      <GoalInput visible={isAddMode} onAddGole={addGoleHandler} onCancle={cancleGoel} />
       <FlatList
        data={courceGoles}
         renderItem={itemData => (
           
-        <GoalItem id={itemData.item.id} onDelete={removeGoleHandler} title={itemData.item.value} />
+         <GoalItem id={itemData.item.id} onDelete={removeGoleHandler} title={itemData.item.value} />
       )} />
     </View>
   )
